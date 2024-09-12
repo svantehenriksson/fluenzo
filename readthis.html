@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lue tämä - Read this</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap');
+        
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #0d0d0d;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2.5em;
+            color: #00ffcc;
+            text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        p, ul {
+            font-size: 1.2em;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 1em;
+            background-color: #00ffcc;
+            color: #0d0d0d;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            margin-top: 40px;
+        }
+
+        .back-button:hover {
+            background-color: #0d0d0d;
+            color: #00ffcc;
+            border: 2px solid #00ffcc;
+        }
+
+        .back-button:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+        }
+
+        .hover-word {
+            position: relative;
+            cursor: pointer;
+            color: #00ffcc;
+        }
+
+        .hover-word::after {
+            content: attr(data-translation);
+            position: absolute;
+            background-color: #00ffcc;
+            color: #0d0d0d;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 10; /* Ensures tooltip is above everything */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Adds a shadow to the tooltip */
+        }
+
+        .hover-word:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        ul {
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Lue tämä - Read this</h1>
+
+    <p>
+        <span class="hover-word" data-translation="FI: Fluenzolla, EN: Fluenzo">Fluenzolla</span>
+        <span class="hover-word" data-translation="FI: on, EN: is">on</span> 
+        <span class="hover-word" data-translation="FI: yksinkertainen, EN: simple">yksinkertainen</span>
+        <span class="hover-word" data-translation="FI: tavoite, EN: goal">tavoite</span>: 
+        <span class="hover-word" data-translation="FI: auttaa, EN: to help">auttaa</span> 
+        <span class="hover-word" data-translation="FI: sinua, EN: you">sinua</span> 
+        <span class="hover-word" data-translation="FI: oppimaan, EN: learn">oppimaan</span> 
+        <span class="hover-word" data-translation="FI: suomea, EN: Finnish">suomea</span>!
+    </p>
+
+    <p>
+        <span class="hover-word" data-translation="FI: Miten, EN: How">Miten</span> 
+        <span class="hover-word" data-translation="FI: teemme, EN: do">teemme</span> 
+        <span class="hover-word" data-translation="FI: sen, EN: it">sen</span>?
+    </p>
+
+    <ul>
+        <li><span class="hover-word" data-translation="FI: Helppoa, EN: Easy">Helppoa</span> - <span class="hover-word" data-translation="FI: mukavuusalueella, EN: in the comfort zone">mukavuusalueella</span> <span class="hover-word" data-translation="FI: on, EN: is">on</span> <span class="hover-word" data-translation="FI: mukavampaa, EN: more comfortable">mukavampaa</span></li>
+        <li><span class="hover-word" data-translation="FI: Hauskaa, EN: Fun">Hauskaa</span> - <span class="hover-word" data-translation="FI: iloisena, EN: when happy">iloisena</span> <span class="hover-word" data-translation="FI: oppii, EN: learns">oppii</span> <span class="hover-word" data-translation="FI: paremmin, EN: better">paremmin</span> <span class="hover-word" data-translation="FI: kuin, EN: than">kuin</span> <span class="hover-word" data-translation="FI: vihaisena, EN: when angry">vihaisena</span></li>
+        <li><span class="hover-word" data-translation="FI: Luonnollisesti, EN: Naturally">Luonnollisesti</span> - <span class="hover-word" data-translation="FI: tarinoiden, EN: stories">tarinoiden</span> <span class="hover-word" data-translation="FI: ja, EN: and">ja</span> <span class="hover-word" data-translation="FI: pelien, EN: games">pelien</span> <span class="hover-word" data-translation="FI: kautta, EN: through">kautta</span></li>
+        <li><span class="hover-word" data-translation="FI: Toistolla, EN: Repetition">Toistolla</span> - <span class="hover-word" data-translation="FI: unohda, EN: forget">unohda</span> <span class="hover-word" data-translation="FI: muistaminen, EN: remembering">muistaminen</span>!</li>
+        <li><span class="hover-word" data-translation="FI: Vinkeillä, EN: Tips">Vinkeillä</span> - <span class="hover-word" data-translation="FI: lue, EN: read">lue</span> <span class="hover-word" data-translation="FI: kirjoja, EN: books">kirjoja</span>, <span class="hover-word" data-translation="FI: kuuntele, EN: listen">kuuntele</span> <span class="hover-word" data-translation="FI: musiikkia, EN: music">musiikkia</span>, <span class="hover-word" data-translation="FI: katso, EN: watch">katso</span> <span class="hover-word" data-translation="FI: sarjoja, EN: series">sarjoja</span>, <span class="hover-word" data-translation="FI: puhu, EN: talk">puhu</span> <span class="hover-word" data-translation="FI: suomalaisten, EN: Finnish people">suomalaisten</span> <span class="hover-word" data-translation="FI: kanssa, EN: with">kanssa</span>!</li>
+    </ul>
+
+    <p>Fluenzo has a simple goal - to help you learn Finnish!</p>
+    <p>How do we do it?</p>
+    <ul>
+        <li>Easy - It's more comfortable in the comfort zone</li>
+        <li>Fun - You learn better when you're happy than when you're angry</li>
+        <li>Naturally - Through stories and games</li>
+        <li>Repetition - Forget to remember!</li>
+        <li>Tips - Read books, listen to music, watch series, talk to Finnish people!</li>
+    </ul>
+
+    <!-- Back to Home Button -->
+    <button class="back-button" onclick="location.href='fluenzo.html'">Back to Home</button>
+
+</body>
+</html>
