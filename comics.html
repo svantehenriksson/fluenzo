@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarjakuvat - Comics</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap');
+        
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #0d0d0d;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 3.5em;
+            color: #00ffcc;
+            text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc, 0 0 15px #00ffcc;
+            margin-bottom: 50px;
+        }
+
+        .nav-button {
+            background-color: transparent;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5em;
+            border: 2px solid #00ffcc;
+            padding: 20px 40px;
+            margin: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+        }
+
+        .nav-button:hover {
+            background-color: #00ffcc;
+            color: #0d0d0d;
+            box-shadow: 0 0 10px #00ffcc, 0 0 15px #00ffcc, 0 0 20px #00ffcc;
+            border-color: #00ffcc;
+        }
+
+        .nav-button:active {
+            transform: scale(0.9);
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #00ffcc, 0 0 15px #00ffcc;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .nav-button:hover::before {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .nav-button {
+                font-size: 1.2em;
+                padding: 15px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sarjakuvat - Comics</h1>
+
+    <!-- Tinder Date Button -->
+    <button class="nav-button" onclick="location.href='Comics/Tinder-treffit/comic2.html'">Tinder-treffit - Tinder Date</button>
+
+</body>
+</html>

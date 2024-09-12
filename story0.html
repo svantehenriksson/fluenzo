@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finnish Story - Tarina</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap');
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #0d0d0d;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2.5em;
+            color: #00ffcc;
+            text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        p, ul {
+            font-size: 1.2em;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 1em;
+            background-color: #00ffcc;
+            color: #0d0d0d;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            margin-top: 40px;
+        }
+
+        .back-button:hover {
+            background-color: #0d0d0d;
+            color: #00ffcc;
+            border: 2px solid #00ffcc;
+        }
+
+        .back-button:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+        }
+
+        .hover-word {
+            position: relative;
+            cursor: pointer;
+            color: #00ffcc;
+        }
+
+        .hover-word::after {
+            content: attr(data-translation);
+            position: absolute;
+            background-color: #00ffcc;
+            color: #0d0d0d;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 10;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .hover-word:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* Microphone button styling */
+        .microphone-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .microphone-icon {
+            width: 50px;
+            height: 50px;
+            filter: invert(100%);
+        }
+
+        /* Highlighted word */
+        .highlight {
+            background-color: #ffcc00;
+        }
+
+        .english-translation {
+            margin-top: 50px;
+            color: #00ffcc;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Suomalainen Tarina - Finnish Story</h1>
+
+    <!-- The Story -->
+    <p id="story">
+        <span class="hover-word" data-translation="FI: Oli, EN: There was">Oli</span> 
+        <span class="hover-word" data-translation="FI: kerran, EN: once">kerran</span> 
+        <span class="hover-word" data-translation="FI: pieni, EN: small">pieni</span> 
+        <span class="hover-word" data-translation="FI: poika, EN: boy">poika</span>, 
+        joka 
+        <span class="hover-word" data-translation="FI: asui, EN: lived">asui</span> 
+        <span class="hover-word" data-translation="FI: metsän, EN: forest">metsän</span> 
+        <span class="hover-word" data-translation="FI: reunalla, EN: edge">reunalla</span>.
+    </p>
+    <p id="story-part2">
+        <span class="hover-word" data-translation="FI: Hän, EN: He">Hän</span> 
+        <span class="hover-word" data-translation="FI: rakasti, EN: loved">rakasti</span> 
+        <span class="hover-word" data-translation="FI: luontoa, EN: nature">luontoa</span> 
+        ja 
+        <span class="hover-word" data-translation="FI: vietti, EN: spent">vietti</span> 
+        <span class="hover-word" data-translation="FI: aikaa, EN: time">aikaa</span> 
+        <span class="hover-word" data-translation="FI: metsässä, EN: in the forest">metsässä</span> 
+        <span class="hover-word" data-translation="FI: joka, EN: which">joka</span> 
+        <span class="hover-word" data-translation="FI: päivä, EN: day">päivä</span>.
+    </p>
+
+    <!-- Microphone Button to trigger Text to Speech -->
+    <button class="microphone-button" onclick="speakStory()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Ic_mic_48px.svg" alt="Microphone Icon" class="microphone-icon">
+    </button>
+
+    <!-- English Translation -->
+    <div class="english-translation">
+        <p>There was once a small boy who lived at the edge of the forest. He loved nature and spent time in the forest every day.</p>
+    </div>
+
+    <!-- Back to Home Button -->
+    <button class="back-button" onclick="location.href='fluenzo.html'">Back to Home</button>
+
+    <script>
+        const storyText = [
+            { text: "Oli", translation: "FI: Oli, EN: There was" },
+            { text: "kerran", translation: "FI: kerran, EN: once" },
+            { text: "pieni", translation: "FI: pieni, EN: small" },
+            { text: "poika", translation: "FI: poika, EN: boy" },
+            { text: "joka", translation: "FI: joka, EN: who" },
+            { text: "asui", translation: "FI: asui, EN: lived" },
+            { text: "metsän", translation: "FI: metsän, EN: forest" },
+            { text: "reunalla", translation: "FI: reunalla, EN: edge" },
+            { text: "Hän", translation: "FI: Hän, EN: He" },
+            { text: "rakasti", translation: "FI: rakasti, EN: loved" },
+            { text: "luontoa", translation: "FI: luontoa, EN: nature" },
+            { text: "ja", translation: "FI: ja, EN: and" },
+            { text: "vietti", translation: "FI: vietti, EN: spent" },
+            { text: "aikaa", translation: "FI: aikaa, EN: time" },
+            { text: "metsässä", translation: "FI: metsässä, EN: in the forest" },
+            { text: "joka", translation: "FI: joka, EN: which" },
+            { text: "päivä", translation: "FI: päivä, EN: day" }
+        ];
+
+        let currentWordIndex = 0;
+
+        function highlightWord(index) {
+            const allWords = document.querySelectorAll('.hover-word');
+            allWords.forEach(word => word.classList.remove('highlight'));
+            if (allWords[index]) {
+                allWords[index].classList.add('highlight');
+            }
+        }
+
+        function speakStory() {
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.lang = 'fi-FI'; // Set Finnish language
+            utterance.text = storyText.map(wordObj => wordObj.text).join(' ');
+            
+            // Track word highlights while speaking
+            utterance.onboundary = function(event) {
+                if (event.name === 'word') {
+                    highlightWord(currentWordIndex);
+                    currentWordIndex++;
+                }
+            };
+            
+            // Reset after speaking
+            utterance.onend = function() {
+                currentWordIndex = 0;
+                document.querySelectorAll('.hover-word').forEach(word => word.classList.remove('highlight'));
+            };
+            
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+
+</body>
+</html>

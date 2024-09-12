@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluenzo-sarjis: Tinder-treffit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            text-align: center; /* Center the titles */
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 36px;
+        }
+
+        h2 {
+            margin-top: 10px;
+            font-size: 24px;
+            color: #555;
+        }
+
+        .comic-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .comic-frame {
+            width: 300px;
+            height: 300px;
+            border: 2px solid #000;
+            background-color: #fff;
+            margin: 20px;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .comic-frame img {
+            width: 100px;
+            height: auto;
+        }
+
+        .character1 {
+            position: absolute;
+            left: 10px;
+            bottom: 10px;
+        }
+
+        .character2 {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+        }
+
+        .speech-bubble {
+            position: absolute;
+            top: 20px;
+            width: 180px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            text-align: center;
+            white-space: pre-wrap;
+            z-index: 1; /* Ensure the text is above the background bubble */
+        }
+
+        /* Speech bubble on the left for the dog */
+        .speech-left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/7f/Speech_bubble.svg');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Speech bubble on the right for the cat (mirror image only for background) */
+        .speech-right::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/7f/Speech_bubble.svg');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            transform: scaleX(-1); /* Mirror the bubble background */
+        }
+
+        .speech-left {
+            left: 10px;
+        }
+
+        .speech-right {
+            right: 10px;
+        }
+
+        .example-word {
+            cursor: pointer;
+            margin-right: 5px;
+            z-index: 2; /* Ensure text is above the mirrored bubble */
+        }
+
+        #translation-popup {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Titles -->
+    <h1>Tinder-treffit</h1>
+    <h2>Fluenzo-sarjis, osa 1 - Fluenzo comics, part 1</h2>
+    <h2>Click on the words for translations</h2>
+
+    <!-- Comic Container -->
+    <div class="comic-container" id="comic-container"></div>
+
+    <!-- Popup for translations -->
+    <div id="translation-popup"></div>
+
+    <script>
+        // Set the number of frames dynamically
+        const numberOfFrames = 21; // 10 frames for this example
+
+        const wordTranslations = {
+            "Hi": "Hei",
+            "there": "siellä",
+            "How": "Miten",
+            "are": "menee",
+            "you": "sinulle",
+            "I’m": "Minä olen",
+            "great": "hyvin",
+            "thanks": "kiitos",
+            "See": "Nähdään",
+            "soon": "pian",
+            "What": "Mitä",
+            "happened": "tapahtui",
+            "yesterday": "eilen",
+            "Where": "Missä",
+            "were": "olit",
+            "all": "kaiken",
+            "day": "päivän",
+            "busy": "kiireinen",
+            "oletko" : "are you?"
+        };
+
+        const bookfinnish = {
+            "oot": "oletko",
+            "there": "siellä",
+            "How": "Miten",
+            "are": "menee",
+            "you": "sinulle",
+            "I’m": "Minä olen",
+            "great": "hyvin",
+            "thanks": "kiitos",
+            "See": "Nähdään",
+            "soon": "pian",
+            "What": "Mitä",
+            "happened": "tapahtui",
+            "yesterday": "eilen",
+            "Where": "Missä",
+            "were": "olit",
+            "all": "kaiken",
+            "day": "päivän",
+            "busy": "kiireinen"
+        };
+
+
+        // Sentences for each frame
+        const sentences = [
+            "Moi, oot sä <br> mun Tinder-deitti?", // Frame 1
+            "En, mä ootan vaan bussia", // Frame 2
+            "Okei.", // Frame 3
+            "", //Frame 4
+            "Moi, oot sä mun Tinder-deitti?", // Frame 4
+            "Joo, oon", // Frame 5
+            "Mä oon Annukka moi", // Frame 6
+            "Timo", // Frame 7
+            "Mitä sä harrastat Timo?", // Frame 8
+            "Mä pelaan tietokoneella", // Frame 9
+            "Mä harrastan joogaa. Ja oon vegaaniaktivisti", // Frame 10
+            "Okei, kuulostaa hyvältä", // Frame 11
+            "Missä sä asut Timo?", // Frame 12
+            "Mun vanhempien luona", // Frame 13
+            "Mä asun Kalliossa", // Frame 14
+            "Aijaa", // Frame 15
+            "Haluut sä kaljan?", // Frame 16
+            "Tarjoot sä?", // Frame 17
+            "En", // Frame 18
+            "Okei, mä maksan ite" // Frame 19
+        ];
+
+        // Control which character has the speech bubble in each frame
+        const speechPositions = [
+            'left',  // Frame 1: Speech bubble on character1 (dog)
+            'right', // Frame 2: Speech bubble on character2 (cat)
+            'left',  // Frame 3: Speech bubble on character1 (dog)
+            'right', // Frame 4: Speech bubble on character2 (cat)
+            'left', // Frame 5: Speech bubble on character2 (cat)
+            'right',  // Frame 6: Speech bubble on character1 (dog)
+            'left',  // Frame 7: Speech bubble on character1 (dog)
+            'right', // Frame 8: Speech bubble on character2 (cat)
+            'left',  // Frame 9: Speech bubble on character1 (dog)
+            'right',  // Frame 10: Speech bubble on character2 (cat)            
+            'left',  // Frame 11: Speech bubble on character1 (dog)
+            'right',  // Frame 12: Speech bubble on character2 (cat)
+            'left',  // Frame 13: Speech bubble on character1 (dog)
+            'right',  // Frame 14: Speech bubble on character1 (dog)
+            'left', // Frame 15: Speech bubble on character2 (cat)
+            'right',  // Frame 16: Speech bubble on character1 (dog)
+            'left',  // Frame 17: Speech bubble on character2 (cat)            
+            'right',  // Frame 18: Speech bubble on character1 (dog)
+            'left'  // Frame 19: Speech bubble on character2 (cat)
+        ];
+
+        const translationPopup = document.getElementById('translation-popup');
+
+        // Function to dynamically create comic frames
+        function createComicFrames() {
+            const container = document.getElementById('comic-container');
+
+
+            for (let i = 0; i < 3; i++) {
+                const frame = document.createElement('div');
+                frame.classList.add('comic-frame');
+
+                // Add characters
+                const character1 = document.createElement('img');
+                character1.src = 'girl.webp';
+                character1.classList.add('character1');
+                frame.appendChild(character1);
+
+                const character2 = document.createElement('img');
+                character2.src = 'boy1.webp';
+                character2.classList.add('character2');
+                frame.appendChild(character2);
+
+                // Add speech bubble and set position based on speechPositions array
+                const speechBubble = document.createElement('div');
+                speechBubble.classList.add('speech-bubble');
+                speechBubble.id = `speech${i + 1}`;
+
+                // Set speech bubble position to either left or right
+                if (speechPositions[i] === 'left') {
+                    speechBubble.classList.add('speech-left'); // Next to character1 (dog)
+                } else {
+                    speechBubble.classList.add('speech-right'); // Next to character2 (cat) with mirrored background
+                }
+
+                frame.appendChild(speechBubble);
+
+                // Append frame to the container
+                container.appendChild(frame);
+
+                // Create word elements for the speech bubble
+                createWordElements(sentences[i], speechBubble);
+            }
+
+            for (let i = 3; i < 4; i++) {
+                const frame = document.createElement('div');
+                frame.classList.add('comic-frame');
+
+                // Create a large text element
+                const textElement = document.createElement('div');
+                textElement.textContent = '5 minuuttia myöhemmin';
+                textElement.style.fontSize = '48px'; // Large text size
+                textElement.style.fontWeight = 'bold'; // Bold text
+                textElement.style.textAlign = 'center'; // Center the text
+                textElement.style.margin = '20px 0'; // Add some margin for spacing
+
+                // Append the text and frame to the container
+                frame.appendChild(textElement);
+                container.appendChild(frame);
+
+            }
+
+            for (let i = 4; i < numberOfFrames-1; i++) {
+                const frame = document.createElement('div');
+                frame.classList.add('comic-frame');
+
+                // Add characters
+                const character1 = document.createElement('img');
+                character1.src = 'girl.webp';
+                character1.classList.add('character1');
+                frame.appendChild(character1);
+
+                const character2 = document.createElement('img');
+                character2.src = 'boy2.webp';
+                character2.classList.add('character2');
+                frame.appendChild(character2);
+
+                // Add speech bubble and set position based on speechPositions array
+                const speechBubble = document.createElement('div');
+                speechBubble.classList.add('speech-bubble');
+                speechBubble.id = `speech${i + 1}`;
+
+                // Set speech bubble position to either left or right
+                if (speechPositions[i] === 'left') {
+                    speechBubble.classList.add('speech-left'); // Next to character1 (dog)
+                } else {
+                    speechBubble.classList.add('speech-right'); // Next to character2 (cat) with mirrored background
+                }
+
+                frame.appendChild(speechBubble);
+
+                // Append frame to the container
+                container.appendChild(frame);
+
+                // Create word elements for the speech bubble
+                createWordElements(sentences[i], speechBubble);
+            }
+
+            for (let i = numberOfFrames - 1; i < numberOfFrames; i++) {
+                const frame = document.createElement('div');
+                frame.classList.add('comic-frame');
+
+                // Add the image and make it fill the entire frame
+                const character1 = document.createElement('img');
+                character1.src = 'cheers.webp';
+
+                // Set styles to make the image fill the entire frame
+                character1.style.width = '80%';
+                character1.style.height = '80%';
+                //character1.style.objectFit = 'cover'; // Ensures the image covers the entire frame without distortion
+
+                frame.appendChild(character1);
+
+                // Append the frame to the container
+                container.appendChild(frame);
+            }
+        }
+
+        function createWordElements(sentence, container) {
+            container.innerHTML = ''; // Clear any existing content
+            const words = sentence.split(' '); // Split sentence into words
+
+            words.forEach((word, index) => {
+                const span = document.createElement('span');
+                span.classList.add('example-word');
+                //span.textContent = word.replace(/[.!?]/, ''); // Remove punctuation for cleaner display, *WHY WAS THIS DONE? -SVANTE
+                //span.textContent = word.replace(/[]/, ''); 
+                span.innerHTML = word; 
+                word1 = bookfinnish[word] || 'Book Finnish word not found';
+                span.onmouseover = () => showTranslationPopup(span, word1);
+                span.onmouseout = hideTranslationPopup;
+
+                container.appendChild(span);
+
+                // Add space between words but not after the last word
+                if (index < words.length - 1) {
+                    container.appendChild(document.createTextNode(' '));
+                }
+            });
+        }
+
+        function showTranslationPopup(element, word) {
+            const cleanedWord = word.replace(/[.!?]/, ''); // Clean punctuation from word
+            const translation = wordTranslations[cleanedWord] || 'Translation not found';
+            translationPopup.innerHTML = `<strong>FI:</strong> ${cleanedWord}<br><strong>EN:</strong> ${translation}`;
+
+            // Position the popup relative to the hovered word
+            const rect = element.getBoundingClientRect();
+            translationPopup.style.display = 'block';
+            translationPopup.style.left = `${rect.left + window.pageXOffset}px`;
+            translationPopup.style.top = `${rect.bottom + window.pageYOffset + 5}px`;
+        }
+
+        function hideTranslationPopup() {
+            translationPopup.style.display = 'none';
+        }
+
+        // Create the comic frames based on the set number of frames
+        createComicFrames();
+    </script>
+<a href="quiz.html">Take the quiz</a>
+
+</body>
+</html>
