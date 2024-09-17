@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluenzo Game</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            display: block;
+            background-color: lightblue;
+        }
+        #gameOverPopup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 50px;
+            border-radius: 10px;
+            display: none;
+        }
+        #scoreAndTimer {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            text-align: left;
+            font-size: 30px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 10px;
+            border: 3px solid #000;
+            background-color: #ffffff;
+        }
+        #wordFrame {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 10px;
+            border: 3px solid #000;
+            background-color: #ffffff;
+        }
+        /* Mobile-specific styles */
+        @media only screen and (max-width: 768px) {
+            #wordFrame {
+                top: auto;
+                bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="gameOverPopup">
+        <div id="gameOverText">Peli ohi - Game Over</div>
+        <div id="finalScore">Pisteet - Score: 0</div>
+    </div>
+    <div id="scoreAndTimer">
+        <div id="score">Pisteet - Score: 0</div>
+        <div id="timer">Aikaa jäljellä - Time left: 20</div>
+    </div>
+    <div id="wordFrame">Finnish Word</div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        let characterImage = new Image();
+        characterImage.src = 'https://upload.wikimedia.org/wikipedia/commons/c/cc/718star.svg';
+
+        let character = { x: canvas.width / 2, y: canvas.height / 2, width: isMobile ? 40 : 50, height: isMobile ? 40 : 50 };
+        let bubbles = [];
+        let currentFinnishWord = '';
+        let currentEnglishTranslation = '';
+        let correctAnswer = '';
+        let score = 0;
+        let timeLeft = 20;
+        let gameOver = false;
+        let showTranslation = false;
+
+        let wordPairs = [
+            { finnish: 'koira', english: 'dog', imageSrc: 'https://upload.wikimedia.org/wikipedia/commons/2/29/Dog_wiggling_tail.gif' },
+            { finnish: 'auto', english: 'car', imageSrc: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Red_Car_Closed_Window_Cartoon_Vector.svg' },
+            { finnish: 'kissa', english: 'cat', imageSrc: 'https://upload.wikimedia.org/wikipedia/commons/1/18/Orange_cat_cartoon.png' }
+        ];
+
+        let images = {};
+        wordPairs.forEach(pair => {
+            let img = new Image();
+            img.src = pair.imageSrc;
+            images[pair.finnish] = img;
+        });
+
+        document.addEventListener('keydown', moveCharacter);
+        document.addEventListener('touchstart', handleTouch);
+
+        function moveCharacter(e) {
+            if (e.key === 'ArrowUp') character.y -= 20;
+            if (e.key === 'ArrowDown') character.y += 20;
+            if (e.key === 'ArrowLeft') character.x -= 20;
+            if (e.key === 'ArrowRight') character.x += 20;
+        }
+
+        function handleTouch(e) {
+            let touch = e.touches[0];
+            character.x = touch.clientX;
+            character.y = touch.clientY;
+        }
+
+        function spawnBubbles() {
+            let newWord = wordPairs[Math.floor(Math.random() * wordPairs.length)];
+            currentFinnishWord = newWord.finnish;
+            currentEnglishTranslation = newWord.english;
+            correctAnswer = newWord.finnish;
+
+            document.getElementById('wordFrame').textContent = currentFinnishWord;
+
+            let bubbleSize = isMobile ? 50 : 80;  // Shrink bubbles for mobile
+
+            bubbles = wordPairs.map(pair => {
+                return {
+                    finnish: pair.finnish,
+                    x: Math.random() * (canvas.width - bubbleSize),
+                    y: Math.random() * (canvas.height - bubbleSize),
+                    radius: bubbleSize / 2,
+                    dx: Math.random() * 2 - 1,
+                    dy: Math.random() * 2 - 1,
+                    image: images[pair.finnish]
+                };
+            });
+        }
+
+        function updateBubbles() {
+            bubbles.forEach(bubble => {
+                bubble.x += bubble.dx;
+                bubble.y += bubble.dy;
+                if (bubble.x + bubble.radius > canvas.width || bubble.x - bubble.radius < 0) bubble.dx *= -1;
+                if (bubble.y + bubble.radius > canvas.height || bubble.y - bubble.radius < 0) bubble.dy *= -1;
+            });
+        }
+
+        function checkCollision(bubble) {
+            let dist = Math.sqrt(Math.pow(character.x - bubble.x, 2) + Math.pow(character.y - bubble.y, 2));
+            return dist < bubble.radius + character.width / 2;
+        }
+
+        function drawCharacter() {
+            ctx.drawImage(characterImage, character.x, character.y, character.width, character.height);
+        }
+
+        function drawBubbles() {
+            bubbles.forEach(bubble => {
+                ctx.beginPath();
+                ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'white';
+                ctx.fill();
+                ctx.stroke();
+                ctx.drawImage(bubble.image, bubble.x - bubble.radius, bubble.y - bubble.radius, bubble.radius * 2, bubble.radius * 2);
+            });
+        }
+
+        function updateTimer() {
+            if (!gameOver) {
+                timeLeft -= 1;
+                document.getElementById('timer').textContent = 'Aikaa jäljellä - Time left: ' + timeLeft;
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }
+        }
+
+        function checkForCorrectAnswer() {
+            bubbles.forEach(bubble => {
+                if (checkCollision(bubble)) {
+                    if (bubble.finnish === correctAnswer) {
+                        score++;
+                        document.getElementById('score').textContent = 'Pisteet - Score: ' + score;
+                        timeLeft = Math.max(20 - score, 5);
+                        resetGame();
+                    } else {
+                        endGame();
+                    }
+                }
+            });
+        }
+
+        function endGame() {
+            gameOver = true;
+            document.getElementById('gameOverPopup').style.display = 'block';
+            document.getElementById('finalScore').textContent = 'Pisteet - Score: ' + score;
+        }
+
+        function resetGame() {
+            spawnBubbles();
+        }
+
+        function gameLoop() {
+            if (gameOver) return;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawCharacter();
+            drawBubbles();
+            updateBubbles();
+            checkForCorrectAnswer();
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+            spawnBubbles();
+            timeLeft = 20 - score;
+            document.getElementById('timer').textContent = 'Aikaa jäljellä - Time left: ' + timeLeft;
+            setInterval(updateTimer, 1000);
+            gameLoop();
+        }
+
+        startGame();
+    </script>
+</body>
+</html>

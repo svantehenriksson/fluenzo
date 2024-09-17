@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluenzo Game</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            display: block;
+            background-color: lightblue;
+        }
+        #gameOverPopup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 50px;
+            border-radius: 10px;
+            display: none;
+        }
+        #scoreAndTimer {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            text-align: left;
+            font-size: 30px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 10px;
+            border: 3px solid #000;
+            background-color: rgba(255, 255, 255, 0.5); /* Added transparency */
+        }
+        #wordFrame {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 10px;
+            border: 3px solid #000;
+            background-color: rgba(255, 255, 255, 0.5); /* Added transparency */
+            cursor: pointer;
+        }
+        /* Mobile-specific styles */
+        @media only screen and (max-width: 768px) {
+            #wordFrame {
+                top: auto;
+                bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="gameOverPopup">
+        <div id="gameOverText">Peli ohi - Game Over</div>
+        <div id="finalScore">Pisteet - Score: 0</div>
+    </div>
+    <div id="scoreAndTimer">
+        <div id="score">Pisteet - Score: 0</div>
+        <div id="timer">Aikaa jäljellä - Time left: 20</div>
+    </div>
+    <div id="wordFrame">Finnish Word</div>
+
+    <!-- Load external JS files -->
+    <script src="wordData.js"></script>
+    <script src="fluenzoGame.js"></script>
+</body>
+</html>
