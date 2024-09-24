@@ -38,7 +38,7 @@
 <body>
 
     <h1>Seuraa mammutin jälkiä - Follow the Mammoth Tracks!</h1>
-    <div id="score">Pisteet - Score: 0/20</div>
+    <div id="score">Pisteet - Score: 0/10</div>
     <canvas id="gameCanvas" width="800" height="400"></canvas>
 
     <script>
@@ -47,7 +47,7 @@
         const sledWidth = 50;
         const sledHeight = 50;
         const trackWidth = 100;
-        const gameSpeed = 5;
+        const gameSpeed = 4;
 
         let sledX = (canvas.width - sledWidth) / 2;
         let sledY = canvas.height - sledHeight - 10;
@@ -109,10 +109,10 @@
             ) {
                 if (trackType === 'footprints') {
                     score += 1;
-                    document.getElementById('score').textContent = 'Pisteet - Score: ' + score + '/20';
+                    document.getElementById('score').textContent = 'Pisteet - Score: ' + score + '/10';
                     
                     // Check if the player has reached the mammoth (score of 20)
-                    if (score >= 20) {
+                    if (score >= 10) {
                         alert('Congratulations! You have found the mammoth!');
                         window.location.href = 'scene6.html';  // Proceed to scene6.html
                     }
