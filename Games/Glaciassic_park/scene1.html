@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tervetuloa Glaciassic Parkiin!</title>
+    <style>
+        body {
+            background-color: #e0f7ff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #1c75bc;
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        .text-section {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            display: block;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        .text-section span {
+            border-bottom: 1px dashed #1c75bc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .highlight {
+            background-color: #1c75bc;
+            color: #fff;
+        }
+
+        .mic-icon {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #1c75bc;
+            margin-top: 20px;
+        }
+
+        .mic-icon:hover {
+            color: #124b72;
+        }
+
+        img {
+            width: 400px;
+            height: auto;
+            margin: 30px auto;
+            display: block;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.2rem;
+            color: white;
+            background-color: #1c75bc;
+            border: 2px solid #124b72;
+            border-radius: 8px;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px #000000;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #124b72;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tervetuloa Glaciassic Parkiin!</h1>
+
+    <div class="text-section" id="text-to-read">
+        <span title="FI: Lapissa | EN: In Lapland">Lapissa</span> 
+        <span title="FI: on | EN: is">on</span> 
+        <span title="FI: Glaciassic Park -puisto | EN: Glaciassic Park -park">Glaciassic Park -puisto</span>. 
+        <span title="FI: Puistossa | EN: In the park">Puistossa</span> 
+        <span title="FI: näkee | EN: sees">näkee</span> 
+        <span title="FI: kloonattuja | EN: cloned">kloonattuja</span> 
+        <span title="FI: mammutteja | EN: mammoths">mammutteja</span> 
+        <span title="FI: ja | EN: and">ja</span> 
+        <span title="FI: karvaisia | EN: hairy">karvaisia</span> 
+        <span title="FI: sarvikuonoja | EN: rhinos">sarvikuonoja</span>.
+        <br>
+        <span title="FI: Eilen | EN: Yesterday">Eilen</span> 
+        <span title="FI: puistosta | EN: from the park">puistosta</span> 
+        <span title="FI: karkasi | EN: escaped">karkasi</span> 
+        <span title="FI: teini-ikäinen | EN: teenage">teini-ikäinen</span> 
+        <span title="FI: mammutti | EN: mammoth">mammutti</span> 
+        <span title="FI: Mahmud | EN: Mahmud">Mahmud</span>. 
+        <br>
+        <span title="FI: Sen | EN: It was">Sen</span> 
+        <span title="FI: synnytti | EN: born from">synnytti</span> 
+        <span title="FI: intialainen | EN: Indian">intialainen</span> 
+        <span title="FI: elefantti | EN: elephant">elefantti</span> 
+        <span title="FI: Aisha | EN: Aisha">Aisha</span>. 
+        <span title="FI: Aisha | EN: Aisha">Aisha</span> 
+        <span title="FI: ikävöi | EN: misses">ikävöi</span> 
+        <span title="FI: poikaansa | EN: her son">poikaansa</span>.
+        <br>
+        <span title="FI: Sinun | EN: Your">Sinun</span> 
+        <span title="FI: tehtäväsi | EN: task">tehtäväsi</span> 
+        <span title="FI: on | EN: is">on</span> 
+        <span title="FI: tuoda | EN: bring">tuoda</span> 
+        <span title="FI: mammutti | EN: mammoth">mammutti</span> 
+        <span title="FI: takaisin | EN: back">takaisin</span>.
+        <br>
+        <span title="FI: Kamera | EN: The camera">Kamera</span> 
+        <span title="FI: kuvasi | EN: captured">kuvasi</span> 
+        <span title="FI: mammutin | EN: the mammoth's">mammutin</span> 
+        <span title="FI: paon | EN: escape">paon</span>.
+    </div>
+
+    <img src="mahmud_escapes.webp" alt="Mahmud Escaping">
+
+    <span class="mic-icon" onclick="speakText()">🎤</span>
+
+    <div class="button-container">
+        <a href="scene2.html" class="button">Jatka - Continue</a>
+        <a href="quiz1.html" class="button">Sanavisa - Word quiz</a>
+    </div>
+
+    <script>
+        // Function to handle text-to-speech with synchronized highlighting
+        function speakText() {
+            const textElements = document.querySelectorAll('.text-section span');
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.text = "Lapissa on Glaciassic Park -puisto. Puistossa näkee kloonattuja mammutteja ja karvaisia sarvikuonoja. Eilen puistosta karkasi teini-ikäinen mammutti Mahmud. Sen synnytti intialainen elefantti Aisha. Aisha ikävöi poikaansa. Sinun tehtäväsi tuoda mammutti takaisin. Kamera kuvasi mammutin paon.";
+            utterance.lang = 'fi-FI';  // Finnish language
+
+            // Reset all highlights
+            textElements.forEach(el => el.classList.remove('highlight'));
+
+            let wordIndex = 0;
+            const words = utterance.text.split(' ');
+
+            // Synchronize highlights with words spoken
+            utterance.onboundary = function(event) {
+                if (event.name === "word" && wordIndex < textElements.length) {
+                    textElements.forEach(el => el.classList.remove('highlight')); // Remove highlights
+                    textElements[wordIndex].classList.add('highlight'); // Highlight current word
+                    wordIndex++;
+                }
+            };
+
+            // Start speech synthesis
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 4 - Glaciassic Park</title>
+    <style>
+        body {
+            background-color: #e0f7ff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #1c75bc;
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        .text-section {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            display: block;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        .text-section span {
+            border-bottom: 1px dashed #1c75bc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .highlight {
+            background-color: #1c75bc;
+            color: #fff;
+        }
+
+        .mic-icon {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #1c75bc;
+            margin-top: 20px;
+        }
+
+        .mic-icon:hover {
+            color: #124b72;
+        }
+
+        img {
+            width: 400px;
+            height: auto;
+            margin-top: 30px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.2rem;
+            color: white;
+            background-color: #1c75bc;
+            border: 2px solid #124b72;
+            border-radius: 8px;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px #000000;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #124b72;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tervetuloa auto- ja koiravuokraamoon</h1>
+
+    <div class="text-section" id="text-to-read">
+        <span title="FI: Tervetuloa | EN: Welcome">Tervetuloa</span> 
+        <span title="FI: auto- ja koiravuokraamoon | EN: to the car and dog rental">auto- ja koiravuokraamoon</span>.
+        <span title="FI: Haluatko | EN: Do you want">Haluatko</span> 
+        <span title="FI: vuokrata | EN: rent">vuokrata</span> 
+        <span title="FI: nelivetoauton | EN: four-wheel drive">nelivetoauton</span> 
+        <span title="FI: vai | EN: or">vai</span> 
+        <span title="FI: koiravaljakon | EN: dog sledge">koiravaljakon</span>?
+    </div>
+
+    <img src="scene4_image.webp" alt="Scene 4 Image">
+
+    <span class="mic-icon" onclick="speakText()">🎤</span>
+
+    <div class="button-container">
+        <button class="button" onclick="gameOver('Auto jää kiinni lumeen - The car gets stuck in the snow')">Neliveto - Four-wheel drive</button>
+        <button class="button" onclick="goToScene5()">Koiravaljakko - Dog sledge</button>
+        <a href="quiz4.html" class="button">Sanavisa - Word quiz</a>
+    </div>
+
+    <script>
+        // Function to handle text-to-speech with synchronized highlighting
+        function speakText() {
+            const textElements = document.querySelectorAll('.text-section span');
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.text = "Tervetuloa auto- ja koiravuokraamoon. Haluatko vuokrata nelivetoauton vai koiravaljakon?";
+            utterance.lang = 'fi-FI';  // Finnish language
+
+            // Reset all highlights
+            textElements.forEach(el => el.classList.remove('highlight'));
+
+            let wordIndex = 0;
+
+            // Synchronize highlights with words spoken
+            utterance.onboundary = function(event) {
+                if (event.name === "word" && wordIndex < textElements.length) {
+                    textElements.forEach(el => el.classList.remove('highlight')); // Remove highlights
+                    textElements[wordIndex].classList.add('highlight'); // Highlight current word
+                    wordIndex++;
+                }
+            };
+
+            // Start speech synthesis
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Game over popup and redirect
+        function gameOver(message) {
+            alert("Game over. " + message);
+            setTimeout(function() {
+                window.location.href = 'index.html';
+            }, 5000);
+        }
+
+        // Function to go to scene5
+        function goToScene5() {
+            window.location.href = 'scene5.html';
+        }
+    </script>
+
+</body>
+</html>

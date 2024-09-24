@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 6 - Glaciassic Park</title>
+    <style>
+        body {
+            background-color: #e0f7ff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #1c75bc;
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        .text-section {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            display: block;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        .text-section span {
+            border-bottom: 1px dashed #1c75bc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .highlight {
+            background-color: #1c75bc;
+            color: #fff;
+        }
+
+        .mic-icon {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #1c75bc;
+            margin-top: 20px;
+        }
+
+        .mic-icon:hover {
+            color: #124b72;
+        }
+
+        img {
+            width: 400px;
+            height: auto;
+            margin-top: 30px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .button-container {
+            margin-top: 30px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.2rem;
+            color: white;
+            background-color: #1c75bc;
+            border: 2px solid #124b72;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #124b72;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Löysit mammutin</h1>
+
+    <div class="text-section" id="text-to-read">
+        <!-- Text content with mouseover translations -->
+        <span title="FI: Löysit | EN: You found">Löysit</span> 
+        <span title="FI: mammutin | EN: the mammoth">mammutin</span>.
+        <span title="FI: Syötit | EN: You fed">Syötit</span> 
+        <span title="FI: kurkun | EN: cucumber">kurkun</span> 
+        <span title="FI: ja | EN: and">ja</span> 
+        <span title="FI: tomaatin | EN: tomato">tomaatin</span> 
+        <span title="FI: unilääkkeillä | EN: with sleeping drugs">unilääkkeillä</span>.
+        <span title="FI: Mammutti | EN: The mammoth">Mammutti</span> 
+        <span title="FI: nukahti | EN: fell asleep">nukahti</span>.
+        <br><br>
+        <span title="FI: Tutkitte | EN: You examine">Tutkitte</span> 
+        <span title="FI: maastoa | EN: the terrain">maastoa</span>.
+        <span title="FI: Huomaatte | EN: You notice">Huomaatte</span>, 
+        <span title="FI: että | EN: that">että</span> 
+        <span title="FI: mammutti | EN: the mammoth">mammutti</span> 
+        <span title="FI: on luonut | EN: has created">on luonut</span> 
+        <span title="FI: tärkeitä | EN: important">tärkeitä</span> 
+        <span title="FI: polkuja | EN: paths">polkuja</span> 
+        <span title="FI: poroille | EN: for reindeer">poroille</span>.
+        <br><br>
+        <span title="FI: Tallotuista | EN: Trampled">Tallotuista</span> 
+        <span title="FI: puista | EN: trees">puista</span> 
+        <span title="FI: löytyy | EN: are found">löytyy</span> 
+        <span title="FI: pehmeitä | EN: soft">pehmeitä</span> 
+        <span title="FI: osia | EN: parts">osia</span>, 
+        <span title="FI: joita | EN: which">joita</span> 
+        <span title="FI: linnut | EN: birds">linnut</span> 
+        <span title="FI: voivat syödä | EN: can eat">voivat syödä</span>.
+        <br><br>
+        <span title="FI: Ministeriö | EN: The ministry">Ministeriö</span> 
+        <span title="FI: kiinnostuu | EN: becomes interested">kiinnostuu</span> 
+        <span title="FI: tuloksista | EN: in the results">tuloksista</span> 
+        <span title="FI: ja | EN: and">ja</span> 
+        <span title="FI: luo | EN: creates">luo</span> 
+        <span title="FI: työryhmän | EN: a working group">työryhmän</span>.
+        <br><br>
+        <span title="FI: Tutkitaan | EN: It will be studied">Tutkitaan</span>, 
+        <span title="FI: onko | EN: whether">onko</span> 
+        <span title="FI: mammutin | EN: the mammoth">mammutin</span> 
+        <span title="FI: palauttaminen | EN: returning">palauttaminen</span> 
+        <span title="FI: luontoon | EN: to nature">luontoon</span> 
+        <span title="FI: hyvä | EN: beneficial">hyvä</span> 
+        <span title="FI: ekosysteemille | EN: for the ecosystem">ekosysteemille</span>.
+    </div>
+
+    <img src="scene6_image.webp" alt="Scene 6 Image">
+
+    <span class="mic-icon" onclick="speakText()">🎤</span>
+
+    <div class="button-container">
+        <button class="button" onclick="location.href='scene7.html'">Jatka - Continue</button>
+        <button class="button" onclick="location.href='quiz6.html'">Sanavisa - Word quiz</button>
+    </div>
+
+    <script>
+        // Function to handle text-to-speech with synchronized highlighting
+        function speakText() {
+            const textElements = document.querySelectorAll('.text-section span');
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.text = "Löysit mammutin. Syötit kurkun ja tomaatin unilääkkeillä. Mammutti nukahti. Tutkitte maastoa. Huomaatte, että mammutti on luonut tärkeitä polkuja poroille. Tallotuista puista löytyy pehmeitä osia, joita linnut voivat syödä. Ministeriö kiinnostuu tuloksista ja luo työryhmän. Tutkitaan, onko mammutin palauttaminen luontoon hyvä ekosysteemille.";
+            utterance.lang = 'fi-FI';  // Finnish language
+
+            // Reset all highlights
+            textElements.forEach(el => el.classList.remove('highlight'));
+
+            let wordIndex = 0;
+
+            // Synchronize highlights with words spoken
+            utterance.onboundary = function(event) {
+                if (event.name === "word" && wordIndex < textElements.length) {
+                    textElements.forEach(el => el.classList.remove('highlight')); // Remove highlights
+                    textElements[wordIndex].classList.add('highlight'); // Highlight current word
+                    wordIndex++;
+                }
+            };
+
+            // Start speech synthesis
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+
+</body>
+</html>

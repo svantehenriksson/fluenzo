@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 2 - Glaciassic Park</title>
+    <style>
+        body {
+            background-color: #e0f7ff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #1c75bc;
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        .text-section {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            display: block;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        .text-section span {
+            border-bottom: 1px dashed #1c75bc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .highlight {
+            background-color: #1c75bc;
+            color: #fff;
+        }
+
+        .mic-icon {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #1c75bc;
+            margin-top: 20px;
+        }
+
+        .mic-icon:hover {
+            color: #124b72;
+        }
+
+        img {
+            width: 400px;
+            height: auto;
+            margin-top: 30px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.2rem;
+            color: white;
+            background-color: #1c75bc;
+            border: 2px solid #124b72;
+            border-radius: 8px;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px #000000;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #124b72;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Etsi mammutti</h1>
+
+    <div class="text-section" id="text-to-read">
+        <span title="FI: Etsi | EN: Search for">Etsi</span> 
+        <span title="FI: mammutti | EN: mammoth">mammutti</span>.
+        <span title="FI: Tarvitset | EN: You need">Tarvitset</span> 
+        <span title="FI: kulkuvälineen | EN: a vehicle">kulkuvälineen</span> 
+        <span title="FI: ja | EN: and">ja</span> 
+        <span title="FI: ruokaa | EN: food">ruokaa</span>, 
+        <span title="FI: jotta | EN: so that">jotta</span> 
+        <span title="FI: voit | EN: you can">voit</span> 
+        <span title="FI: houkutella | EN: lure">houkutella</span> 
+        <span title="FI: mammutin | EN: the mammoth">mammutin</span> 
+        <span title="FI: luoksesi | EN: towards you">luoksesi</span>.
+        <br>
+        <span title="FI: Tässä | EN: Here is">Tässä</span> 
+        <span title="FI: on | EN: is">on</span> 
+        <span title="FI: unilääke | EN: sleeping drug">unilääke</span>, 
+        <span title="FI: jonka | EN: which">jonka</span> 
+        <span title="FI: voit | EN: you can">voit</span> 
+        <span title="FI: sekoittaa | EN: mix">sekoittaa</span> 
+        <span title="FI: ruokaan | EN: into the food">ruokaan</span>.
+    </div>
+
+    <img src="scene2_image.webp" alt="Scene 2 Image">
+
+    <span class="mic-icon" onclick="speakText()">🎤</span>
+
+    <div class="button-container">
+        <a href="scene3.html" class="button">Mene ruokakauppaan - Go to grocery store</a>
+        <a href="#" class="button" onclick="gameOver()">Lähde heti metsään - Go straight to forest</a>
+        <a href="quiz2.html" class="button">Sanavisa - Word quiz</a>
+    </div>
+
+    <script>
+        // Function to handle text-to-speech with synchronized highlighting
+        function speakText() {
+            const textElements = document.querySelectorAll('.text-section span');
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.text = "Etsi mammutti. Tarvitset kulkuvälineen ja ruokaa, jotta voit houkutella mammutin luoksesi. Tässä on unilääke, jonka voit sekoittaa ruokaan.";
+            utterance.lang = 'fi-FI';  // Finnish language
+
+            // Reset all highlights
+            textElements.forEach(el => el.classList.remove('highlight'));
+
+            let wordIndex = 0;
+
+            // Synchronize highlights with words spoken
+            utterance.onboundary = function(event) {
+                if (event.name === "word" && wordIndex < textElements.length) {
+                    textElements.forEach(el => el.classList.remove('highlight')); // Remove highlights
+                    textElements[wordIndex].classList.add('highlight'); // Highlight current word
+                    wordIndex++;
+                }
+            };
+
+            // Start speech synthesis
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Game over popup and redirection to index.html after 5 seconds
+        function gameOver() {
+            alert("Game over. Kulkeminen ilman varusteita on liian vaikeaa. It's too hard to wander the forest without equipment.");
+            setTimeout(function() {
+                window.location.href = 'index.html';
+            }, 5000);
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanavisa - Word Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7ff;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2.5em;
+            color: #1c75bc;
+            text-shadow: 0 0 5px #1c75bc, 0 0 10px #1c75bc;
+            margin-bottom: 30px;
+        }
+
+        .word {
+            font-size: 2em;
+            color: #1c75bc;
+            margin: 30px 0;
+        }
+
+        .bubbles {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .bubble {
+            background-color: #1c75bc;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .bubble:hover {
+            transform: scale(1.1);
+        }
+
+        .bubble:active {
+            transform: scale(0.9);
+        }
+
+        .scoreboard {
+            margin-top: 40px;
+            font-size: 1.5em;
+        }
+
+        .timer {
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 1em;
+            background-color: #1c75bc;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 40px;
+        }
+
+        .back-button:hover {
+            background-color: #124b72;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sanavisa - Word Quiz</h1>
+
+    <!-- Finnish Word -->
+    <div class="word" id="finnish-word"></div>
+
+    <!-- Bubbles with English Translations -->
+    <div class="bubbles">
+        <div class="bubble" id="option1" onclick="checkAnswer(0)"></div>
+        <div class="bubble" id="option2" onclick="checkAnswer(1)"></div>
+        <div class="bubble" id="option3" onclick="checkAnswer(2)"></div>
+    </div>
+
+    <!-- Scoreboard and Timer -->
+    <div class="scoreboard">Pisteet - Score: <span id="score">0</span></div>
+    <div class="timer">Aikaa jäljellä - Time left: <span id="time-left">20</span>s</div>
+
+    <!-- Back Button -->
+    <button class="back-button" onclick="location.href='scene4.html'">Back to Scene 4</button>
+
+    <script>
+        const words = [
+            { finnish: "Tervetuloa", english: "Welcome" },
+            { finnish: "auto- ja koiravuokraamoon", english: "to the car and dog rental" },
+            { finnish: "nelivetoauton", english: "four-wheel drive" },
+            { finnish: "koiravaljakon", english: "dog sledge" },
+            { finnish: "vuokrata", english: "rent" }
+        ];
+
+        let score = 0;
+        let timeLeft = 20;
+        let currentWordIndex = 0;
+
+        function startQuiz() {
+            updateWord();
+            setInterval(updateTimer, 1000);
+        }
+
+        function updateWord() {
+            const word = words[currentWordIndex];
+            document.getElementById("finnish-word").textContent = word.finnish;
+
+            const randomOptions = generateOptions(word.english);
+            document.getElementById("option1").textContent = randomOptions[0];
+            document.getElementById("option2").textContent = randomOptions[1];
+            document.getElementById("option3").textContent = randomOptions[2];
+        }
+
+        function generateOptions(correctAnswer) {
+            const options = [correctAnswer];
+            while (options.length < 3) {
+                const randomIndex = Math.floor(Math.random() * words.length);
+                const randomAnswer = words[randomIndex].english;
+                if (!options.includes(randomAnswer)) {
+                    options.push(randomAnswer);
+                }
+            }
+            return options.sort(() => Math.random() - 0.5); // Shuffle
+        }
+
+        function checkAnswer(optionIndex) {
+            const word = words[currentWordIndex];
+            const selectedAnswer = document.getElementById("option" + (optionIndex + 1)).textContent;
+
+            if (selectedAnswer === word.english) {
+                score++;
+            }
+
+            updateScore();
+            nextWord();
+        }
+
+        function updateScore() {
+            document.getElementById("score").textContent = score;
+        }
+
+        function nextWord() {
+            currentWordIndex++;
+            if (currentWordIndex < words.length) {
+                updateWord();
+            } else {
+                alert("Game Over! Your final score: " + score);
+                location.reload();
+            }
+        }
+
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timeLeft--;
+                document.getElementById("time-left").textContent = timeLeft;
+            } else {
+                alert("Time's up! Your final score: " + score);
+                location.reload();
+            }
+        }
+
+        window.onload = startQuiz;
+    </script>
+</body>
+</html>

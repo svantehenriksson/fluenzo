@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 5 - Dog Sledge Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #e0f7ff;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: #f0f8ff;
+            border: 1px solid #000;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Seuraa mammutin jälkiä - Follow the Mammoth Tracks!</h1>
+    <div id="score">Pisteet - Score: 0/20</div>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const sledWidth = 50;
+        const sledHeight = 50;
+        const trackWidth = 100;
+        const gameSpeed = 5;
+
+        let sledX = (canvas.width - sledWidth) / 2;
+        let sledY = canvas.height - sledHeight - 10;
+        let score = 0;
+        let trackType = Math.random() < 0.5 ? 'footprints' : 'empty';
+        let trackX = Math.random() * (canvas.width - trackWidth);
+        let trackY = -trackWidth;
+
+        const sledImg = new Image();
+        sledImg.src = 'sledge.png';  // Replace with your dog sledge image
+
+        const mammothFootprintsImg = new Image();
+        mammothFootprintsImg.src = 'mammoth_footprints.png';  // Replace with mammoth footprint image
+
+        const emptyTrackImg = new Image();
+        emptyTrackImg.src = 'empty_track.png';  // Replace with empty track image
+
+        // Handle keyboard inputs
+        let rightPressed = false;
+        let leftPressed = false;
+
+        document.addEventListener('keydown', keyDownHandler, false);
+        document.addEventListener('keyup', keyUpHandler, false);
+
+        function keyDownHandler(e) {
+            if (e.key === 'Right' || e.key === 'ArrowRight') {
+                rightPressed = true;
+            } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+                leftPressed = true;
+            }
+        }
+
+        function keyUpHandler(e) {
+            if (e.key === 'Right' || e.key === 'ArrowRight') {
+                rightPressed = false;
+            } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+                leftPressed = false;
+            }
+        }
+
+        function drawSledge() {
+            ctx.drawImage(sledImg, sledX, sledY, sledWidth, sledHeight);
+        }
+
+        function drawTrack() {
+            if (trackType === 'footprints') {
+                ctx.drawImage(mammothFootprintsImg, trackX, trackY, trackWidth, trackWidth);
+            } else {
+                ctx.drawImage(emptyTrackImg, trackX, trackY, trackWidth, trackWidth);
+            }
+        }
+
+        function collisionCheck() {
+            if (
+                sledX < trackX + trackWidth &&
+                sledX + sledWidth > trackX &&
+                sledY < trackY + trackWidth &&
+                sledY + sledHeight > trackY
+            ) {
+                if (trackType === 'footprints') {
+                    score += 1;
+                    document.getElementById('score').textContent = 'Pisteet - Score: ' + score + '/20';
+                    
+                    // Check if the player has reached the mammoth (score of 20)
+                    if (score >= 20) {
+                        alert('Congratulations! You have found the mammoth!');
+                        window.location.href = 'scene6.html';  // Proceed to scene6.html
+                    }
+                } else {
+                    alert('Game Over! You missed the mammoth tracks.');
+                    document.location.reload();
+                }
+                resetTrack();
+            }
+        }
+
+        function resetTrack() {
+            trackType = Math.random() < 0.5 ? 'footprints' : 'empty';
+            trackX = Math.random() * (canvas.width - trackWidth);
+            trackY = -trackWidth;
+        }
+
+        function updateGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawSledge();
+            drawTrack();
+
+            // Move the track
+            trackY += gameSpeed;
+
+            if (trackY > canvas.height) {
+                resetTrack();
+            }
+
+            // Move the sled
+            if (rightPressed && sledX < canvas.width - sledWidth) {
+                sledX += 7;
+            }
+            if (leftPressed && sledX > 0) {
+                sledX -= 7;
+            }
+
+            collisionCheck();
+
+            requestAnimationFrame(updateGame);
+        }
+
+        sledImg.onload = () => {
+            updateGame();
+        };
+
+    </script>
+
+</body>
+</html>
