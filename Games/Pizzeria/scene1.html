@@ -127,25 +127,38 @@
             box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
         }
 
-        /* Styles for the Kiitos button */
-        #thank-you-container {
-            display: none;
+        /* Subtle Practice Words button */
+        .practice-words-btn {
+            background-color: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            padding: 10px 20px;
+            border: none;
+            font-size: 1.2em;
+            font-family: 'Roboto', sans-serif;
+            cursor: pointer;
+            text-decoration: underline;
             margin-top: 20px;
-            gap: 2em;
+            opacity: 0.6;
+            display: none;
         }
 
-        .thank-you-btn {
+        .practice-words-btn:hover {
+            opacity: 1;
+        }
+
+        .final-choice-btn {
             background-color: #00d4ff;
             color: #1a1a2e;
             border: none;
-            padding: 1em 2em;
-            font-size: 1.2em;
+            padding: 1em 2.5em;
+            font-size: 1.1em;
             cursor: pointer;
             border-radius: 30px;
             transition: all 0.3s ease;
+            margin-top: 1em;
         }
 
-        .thank-you-btn:hover {
+        .final-choice-btn:hover {
             background-color: #008cbf;
             transform: translateY(-5px);
             box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
@@ -159,9 +172,10 @@
 
     <!-- Image and sentence container -->
     <div class="image-container">
-        <img src="image1.webp" alt="Inside the pizzeria">
-        <div id="sentence-box" class="sentence-box"></div>
-        <button id="arrow-btn" class="arrow-button" onclick="showNextSentence()">→</button>
+        <!-- Placeholder for the intro animation -->
+        <img id="scene-image" src="walking.gif" alt="Walking animation">
+        <div id="sentence-box" class="sentence-box" style="display: none;"></div>
+        <button id="arrow-btn" class="arrow-button" style="display: none;" onclick="showNextSentence()">→</button>
     </div>
 
     <!-- Choices -->
@@ -191,15 +205,18 @@
     </div>
 
     <!-- Final Choices (Syö täällä and Mukaan buttons) -->
-    <div id="final-choices" class="choices">
+    <div id="final-choices" class="choices" style="display: none;">
         <button class="choice-btn" onclick="chooseHere()">Syö täällä</button>
         <button class="choice-btn" onclick="chooseTakeaway()">Mukaan</button>
     </div>
 
-    <!-- Thank You Button -->
-    <div id="thank-you-container" class="choices">
-        <button class="thank-you-btn" onclick="showFinalMessage()">Kiitos</button>
+    <!-- Final "Kiitos" button -->
+    <div id="kiitos-button" style="display: none;">
+        <button class="final-choice-btn" onclick="showFinalMessage()">Kiitos</button>
     </div>
+
+    <!-- Subtle Practice Words button -->
+    <button class="practice-words-btn" id="practice-words-btn" onclick="location.href='quiz1.html'">Harjoittele sanoja - Practice words</button>
 
     <script>
         const sentences = [
@@ -225,8 +242,19 @@
             }
         ];
 
-        let currentSentence = 0;
+        let currentSentence = 1; // Start at 1 because we'll display the first sentence after the intro
+
         let selectedToppings = [];
+
+        function startIntro() {
+            setTimeout(() => {
+                document.getElementById('scene-image').src = 'image1.jpeg';  // Change image after 7 seconds
+                document.getElementById('sentence-box').style.display = 'block';  // Show sentence box
+                document.getElementById('sentence-box').innerHTML = `<b>Myyjä:</b><br><br><span class="hover-translate" data-translation="Hi">Moi</span>`; // Display first sentence immediately
+                document.getElementById('arrow-btn').style.display = 'block';  // Show arrow button
+                document.getElementById('practice-words-btn').style.display = 'inline-block';  // Show Practice Words button
+            }, 7000);
+        }
 
         function showNextSentence() {
             const sentenceBox = document.getElementById('sentence-box');
@@ -249,9 +277,6 @@
                 choices.style.display = 'flex';  // Show choices
             }
         }
-
-        // Initialize first sentence
-        showNextSentence();
 
         function choosePizza() {
             document.getElementById('sentence-box').innerHTML = `<b>Myyjä:</b><br><br>
@@ -324,8 +349,6 @@
             document.getElementById('sentence-box').innerHTML = `<b>Myyjä:</b><br><br>
                 <span class="hover-translate" data-translation="We close in 15 minutes">Suljemme 15 minuutin päästä</span>, 
                 <span class="hover-translate" data-translation="maybe it's better to take away">ehkä parempi ottaa mukaan</span>.`;
-           /* document.getElementById('final-choices').style.display = 'none';
-            showThankYouButton(); */
         }
 
         function chooseTakeaway() {
@@ -333,18 +356,15 @@
                 <span class="hover-translate" data-translation="Thank you">Kiitos</span>. 
                 <span class="hover-translate" data-translation="Ready in 10 minutes, here you go">10 minuutin päästä valmis, ole hyvä</span>.`;
             document.getElementById('final-choices').style.display = 'none'; // Hide final choices
-            showThankYouButton();
-        }
-
-        function showThankYouButton() {
-            document.getElementById('thank-you-container').style.display = 'flex'; // Show Kiitos button
+            document.getElementById('kiitos-button').style.display = 'block'; // Show final Kiitos button
         }
 
         function showFinalMessage() {
             document.getElementById('sentence-box').innerHTML = `<b>Onneksi olkoon, tilasit pizzan!</b>`;
-            document.getElementById('thank-you-container').style.display = 'none'; // Hide Kiitos button after final message
+            document.getElementById('kiitos-button').style.display = 'none'; // Hide Kiitos button after clicking
         }
 
+        window.onload = startIntro;
     </script>
 
 </body>

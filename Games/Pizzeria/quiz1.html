@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 1 - Pizzeria</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #1a1a2e;
+            color: #f5f5f5;
+            text-align: center;
+            padding: 2em;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 0.5em;
+            color: #00d4ff;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1.5px;
+        }
+
+        .image-container {
+            position: relative;
+            margin-top: 2em;
+            max-width: 40%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .sentence-box {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(26, 26, 46, 0.8);
+            color: #00d4ff;
+            padding: 1em;
+            border-radius: 10px;
+            font-size: 1.5em;
+            max-width: 90%;
+        }
+
+        .arrow-button {
+            background-color: #00d4ff;
+            color: #1a1a2e;
+            border: none;
+            padding: 0.5em 1.5em;
+            font-size: 1.1em;
+            font-family: 'Roboto', sans-serif;
+            cursor: pointer;
+            border-radius: 30px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: absolute;
+            bottom: 5%;
+            right: 5%;
+        }
+
+        .arrow-button:hover {
+            background-color: #008cbf;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .choices {
+            display: none;
+            justify-content: center;
+            gap: 1.5em;
+            margin-top: 2em;
+        }
+
+        .choice-btn {
+            background-color: #00d4ff;
+            color: #1a1a2e;
+            border: none;
+            padding: 1em 2.5em;
+            font-size: 1.1em;
+            font-family: 'Roboto', sans-serif;
+            cursor: pointer;
+            border-radius: 30px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .choice-btn.active {
+            background-color: #008cbf;
+        }
+
+        .choice-btn:hover {
+            background-color: #008cbf;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Subtle Practice Words button */
+        .practice-words-btn {
+            background-color: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            padding: 10px 20px;
+            border: none;
+            font-size: 1.2em;
+            font-family: 'Roboto', sans-serif;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 20px;
+            opacity: 0.6;
+        }
+
+        .practice-words-btn:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pizzeria</h1>
+
+    <!-- Image and sentence container -->
+    <div class="image-container">
+        <!-- Placeholder for the intro animation -->
+        <img id="scene-image" src="walking.gif" alt="Walking animation">
+        <div id="sentence-box" class="sentence-box" style="display: none;"></div>
+        <button id="arrow-btn" class="arrow-button" style="display: none;" onclick="showNextSentence()">→</button>
+    </div>
+
+    <!-- Choices -->
+    <div id="choices" class="choices">
+        <button class="choice-btn" onclick="choosePizza()">Pizza</button>
+        <button class="choice-btn" onclick="chooseKebab()">Kebab</button>
+        <button class="choice-btn" onclick="chooseSalaatti()">Salaatti</button>
+    </div>
+
+    <!-- Subtle Practice Words button -->
+    <button class="practice-words-btn" onclick="location.href='quiz1.html'">Harjoittele sanoja - Practice words</button>
+
+    <script>
+        const sentences = [
+            {
+                speaker: 'Myyjä:', 
+                words: [
+                    {fi: 'Moi', en: 'Hi'}
+                ]
+            },
+            {
+                speaker: 'Sinä:', 
+                words: [
+                    {fi: 'Moi', en: 'Hi'}
+                ]
+            },
+            {
+                speaker: 'Myyjä:', 
+                words: [
+                    {fi: 'Mitä', en: 'What'}, 
+                    {fi: 'saisi', en: 'would'}, 
+                    {fi: 'olla?', en: 'you like?'}
+                ]
+            }
+        ];
+
+        let currentSentence = 0;
+
+        // Function to start the quiz with an intro delay
+        function startIntro() {
+            setTimeout(() => {
+                document.getElementById('scene-image').src = 'image1.jpeg';  // Change image after 5 seconds
+                document.getElementById('sentence-box').style.display = 'block';  // Show sentence box
+                document.getElementById('arrow-btn').style.display = 'block';  // Show arrow button
+            }, 5000);
+        }
+
+        function showNextSentence() {
+            const sentenceBox = document.getElementById('sentence-box');
+            const arrowBtn = document.getElementById('arrow-btn');
+            const choices = document.getElementById('choices');
+
+            if (currentSentence < sentences.length) {
+                const sentence = sentences[currentSentence];
+                const translatedWords = sentence.words.map(word => {
+                    return `<span class="hover-translate" data-translation="${word.en}">${word.fi}</span>`;
+                }).join(' ');
+
+                sentenceBox.innerHTML = `<b>${sentence.speaker}</b><br><br>${translatedWords}`;
+                currentSentence++;
+            }
+
+            if (currentSentence === sentences.length) {
+                arrowBtn.style.display = 'none';
+                choices.style.display = 'flex';
+            }
+        }
+
+        window.onload = startIntro;
+    </script>
+</body>
+</html>
