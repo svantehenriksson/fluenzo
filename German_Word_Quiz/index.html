@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLUENZO!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap');
+        
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #0d0d0d;
+            color: #fff;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 3.5em;
+            color: #00ffcc;
+            text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            color: #00ffcc;
+            margin-bottom: 30px;
+        }
+
+        #quiz {
+            background-color: #1c1c1c;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 255, 204, 0.3);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .question {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .choices {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .choices button {
+            background-color: #00ffcc;
+            color: #0d0d0d;
+            padding: 15px 25px;
+            font-size: 1.2em;
+            border: 2px solid #00ffcc;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+            box-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+        }
+
+        .choices button:hover {
+            background-color: #0d0d0d;
+            color: #00ffcc;
+            border-color: #00ffcc;
+            transform: scale(1.05);
+        }
+
+        .choices button:active {
+            transform: scale(0.95);
+        }
+
+        #feedback {
+            font-size: 1.5em;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        .correct-answer {
+            animation: correctPulse 0.5s ease;
+            color: #4caf50;
+        }
+
+        @keyframes correctPulse {
+            0% {
+                transform: scale(1);
+                background-color: #00ffcc;
+            }
+            50% {
+                transform: scale(1.2);
+                background-color: #4caf50;
+            }
+            100% {
+                transform: scale(1);
+                background-color: #00ffcc;
+            }
+        }
+        
+        .example-sentence {
+            font-size: 1.2em;
+            margin-top: 15px;
+            font-style: italic;
+            position: relative;
+            color: #fff;
+        }
+
+        .example-word {
+            border-bottom: 1px dotted #ffcc00;
+            cursor: pointer;
+            color: #00ffcc;
+            padding: 0 2px;
+        }
+
+        .translation-popup {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            z-index: 10;
+        }
+
+        #next-button {
+            margin-top: 20px;
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 0 10px #4caf50, 0 0 20px #4caf50;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        #next-button:hover {
+            background-color: #388E3C;
+            transform: scale(1.05);
+        }
+
+        #next-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Progress bar */
+        #progress-bar-container {
+            width: 100%; /* Make progress bar same width as the quiz box */
+            background-color: #333;
+            border-radius: 20px;
+            margin: 20px auto;
+            padding: 5px;
+            max-width: 600px; /* Same width as the quiz box */
+        }
+
+        #progress-bar {
+            width: 0%; /* Start with 0% width */
+            height: 30px;
+            background-color: #00ffcc;
+            border-radius: 15px;
+        }
+
+        #progress-text {
+            font-size: 1.2em;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+
+        /* Styling for the import-progress-form */
+        #import-progress-form {
+            margin-top: 30px;
+            text-align: left; /* Align text and form to the left */
+            max-width: 600px; /* Ensure the form is as wide as the quiz box */
+            margin-left: 0; /* Align form to the left edge of the quiz box */
+            margin-right: auto; /* Center the form within the page */
+        }
+
+        #import-progress-form p {
+            font-size: 1.2em;
+            color: #00ffcc;
+            margin-bottom: 10px;
+        }
+
+        #import-progress-form input {
+            padding: 8px;
+            font-size: 1.2em;
+            width: 100%; /* Keep the input field full-width inside the form */
+            max-width: 200px; /* Limit input width */
+            border-radius: 15px;
+            border: 2px solid #00ffcc;
+            background-color: #1c1c1c;
+            color: #fff;
+            box-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+            margin-bottom: 10px; /* Add space below the input */
+        }
+
+        #import-progress-form button {
+            background-color: #00ffcc;
+            color: #0d0d0d;
+            padding: 8px 15px; /* Reduced padding for smaller button */
+            font-size: 1em; /* Smaller font size */
+            border: 2px solid #00ffcc;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+            box-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+            margin-top: 10px; /* Add some margin between button and input */
+        }
+
+        #import-progress-form button:hover {
+            background-color: #0d0d0d;
+            color: #00ffcc;
+            transform: scale(1.05);
+        }
+
+        #import-progress-form button:active {
+            transform: scale(0.95);
+        }
+
+        #import-progress-form #error-message {
+            font-size: 1.2em;
+            margin-top: 10px;
+            color: red;
+            display: none; /* Error message initially hidden */
+        }
+
+
+
+        /* Styling for the import-progress-form */
+        #import-progress-form {
+            margin-top: 30px;
+            text-align: left; /* Align text and form to the left */
+            max-width: 600px; /* Same width as the quiz box */
+            margin-left: auto; /* Ensures the form aligns left */
+            margin-right: auto; /* Centers the form within the page */
+        }
+
+        #import-progress-form p {
+            font-size: 1.2em;
+            color: #00ffcc;
+            margin-bottom: 10px;
+        }
+
+        #import-progress-form input {
+            padding: 12px;
+            font-size: 1.2em;
+            width: 100%; /* Makes the input field as wide as the form */
+            border-radius: 15px;
+            border: 2px solid #00ffcc;
+            background-color: #1c1c1c;
+            color: #fff;
+            box-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+            margin-bottom: 15px;
+        }
+
+        #import-progress-form button {
+            background-color: #00ffcc;
+            color: #0d0d0d;
+            padding: 12px 25px;
+            font-size: 1.2em;
+            border: 2px solid #00ffcc;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+            box-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+        }
+
+        #import-progress-form button:hover {
+            background-color: #0d0d0d;
+            color: #00ffcc;
+            transform: scale(1.05);
+        }
+
+        #import-progress-form button:active {
+            transform: scale(0.95);
+        }
+
+        #import-progress-form #error-message {
+            font-size: 1.2em;
+            margin-top: 10px;
+            color: red;
+            display: none; /* Error message initially hidden */
+        }
+
+    </style>
+
+    
+    
+
+</head>
+<body>
+
+    <h1>FLUENZO</h1>
+    <h2>Lerne 500 deutsche Wörter schnell!</h2>
+
+
+    <div id="quiz">
+        <div class="question" id="question"></div>
+        <div class="choices" id="choices"></div>
+        <p id="feedback"></p>
+        <p class="example-sentence" id="example-sentence"></p>
+        <div class="translation-popup" id="translation-popup"></div>
+        <button id="next-button" onclick="showQuestion()">Next Word</button>
+    </div>
+    
+    <!-- Progress Bar -->
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
+    <p id="progress-text">Wörter 0/500</p>
+
+    <p><br><br><br></p>
+
+
+    <div id="import-progress-form">
+        <p id="progress-text">Import progress from earlier session</p>
+        <input type="number" id="progress-input" min="0" max="500" placeholder="#Words (0-500)">
+        <button onclick="importProgress()">Import</button>
+        <p id="error-message" style="color: red; display: none;">Please enter an integer between 0 and 500.</p>
+    </div>
+      
+    
+
+    <!-- Include external JavaScript file -->
+    <script src="data.js"></script>
+
+
+
+    <script>
+        const questionElement = document.getElementById('question');
+        const choicesElement = document.getElementById('choices');
+        const feedbackElement = document.getElementById('feedback');
+        const exampleSentenceElement = document.getElementById('example-sentence');
+        const translationPopup = document.getElementById('translation-popup');
+        const nextButton = document.getElementById('next-button');
+        const progressText = document.getElementById('progress-text');
+        const progressBar = document.getElementById('progress-bar');
+    
+        const totalWords = 500;
+        let knownWords = 0; // Initialize knownWords to 0
+        let answers = new Array(totalWords).fill(0); // Array to track correctness of each word
+    
+        let currentPair;
+        let currentWordIndex; // To store the index of the current word
+    
+
+        function getRandomPair() {
+            // Get all indices where the answer is between 0 and 2 (i.e., less than 3 correct answers)
+            const validIndices = answers
+                .map((value, index) => (value >= 0 && value <= 2) ? index : -1) // Only consider values 0, 1, or 2
+                .filter(index => index !== -1); // Filter out -1 values (which represent 3 or more correct answers)
+
+            // Select the first 20 indices (or fewer if there aren't enough)
+            const indicesToChooseFrom = validIndices.slice(0, 20);
+
+            // If there are no valid answers to choose from, we can pick a random word from the entire list (as a fallback)
+            if (indicesToChooseFrom.length === 0) {
+                return wordPairs[Math.floor(Math.random() * wordPairs.length)];
+            }
+
+            // Pick a random index from the valid options
+            const randomIndex = indicesToChooseFrom[Math.floor(Math.random() * indicesToChooseFrom.length)];
+
+            // Return the word pair corresponding to the random index
+            return wordPairs[randomIndex];
+        }
+    
+        function showQuestion() {
+            currentPair = getRandomPair();
+            currentWordIndex = wordPairs.indexOf(currentPair); // Get the index of the current word
+            questionElement.textContent = `What is the German word for "${currentPair.english}"?`;
+            const choices = wordPairs
+                .map(pair => pair.german)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 4);
+    
+            if (!choices.includes(currentPair.german)) {
+                choices[Math.floor(Math.random() * choices.length)] = currentPair.german;
+            }
+    
+            choicesElement.innerHTML = '';
+            choices.forEach(choice => {
+                const button = document.createElement('button');
+                button.textContent = choice;
+                button.onclick = () => checkAnswer(choice);
+                choicesElement.appendChild(button);
+            });
+    
+            feedbackElement.textContent = '';
+            exampleSentenceElement.textContent = '';
+            nextButton.style.display = 'none';
+        }
+    
+        function checkAnswer(choice) {
+            if (choice === currentPair.german) {
+                feedbackElement.textContent = 'Correct!';
+                feedbackElement.classList.add('correct-answer');
+                const beerSound = new Audio('beer-can-open-sound-230903.mp3');
+                beerSound.play();
+                answers[currentWordIndex]++; // Mark the word as answered correctly
+                knownWords = answers.filter(answer => answer >= 3).length; // Count known words as those that have been answered correctly 3 times in a row (or more)
+            } else {
+                feedbackElement.textContent = `Incorrect! The correct answer is "${currentPair.german}".`;
+                const mosquitoSound = new Audio('flying-mosquito-105770.mp3');
+                mosquitoSound.play();
+                answers[currentWordIndex] = 0; // Reset the word as incorrectly answered
+                setTimeout(() => {
+                    mosquitoSound.pause();
+                    mosquitoSound.currentTime = 0;
+                }, 7000);
+            }
+            updateProgress();
+            showExampleSentence();
+            nextButton.style.display = 'inline-block';
+        }
+    
+        function showExampleSentence() {
+            exampleSentenceElement.innerHTML = '';
+            const words = currentPair.exampleDE.split(' ');
+    
+            words.forEach(word => {
+                const span = document.createElement('span');
+                span.classList.add('example-word');
+                span.textContent = word;
+                span.onmouseover = () => showTranslationPopup(span, word);
+                span.onmouseout = hideTranslationPopup;
+                exampleSentenceElement.appendChild(span);
+                exampleSentenceElement.appendChild(document.createTextNode(' '));
+            });
+    
+            const translationDisplay = document.createElement('div');
+            translationDisplay.textContent = currentPair.exampleEN;
+            translationDisplay.style.color = '#ffcc00';
+            translationDisplay.style.marginTop = '10px';
+            exampleSentenceElement.appendChild(translationDisplay);
+        }
+    
+        function showTranslationPopup(element, word) {
+            const cleanedWord = word.trim().replace(/[.,!?;:]$/, '');
+            const translation = wordTranslations[cleanedWord] || 'Translation not found';
+            translationPopup.innerHTML = `<strong>German:</strong> ${word}<br><strong>English:</strong> ${translation}`;
+            const rect = element.getBoundingClientRect();
+            translationPopup.style.display = 'block';
+            translationPopup.style.left = `${rect.left + window.pageXOffset}px`;
+            translationPopup.style.top = `${rect.bottom + window.pageYOffset + 5}px`;
+        }
+    
+        function hideTranslationPopup() {
+            translationPopup.style.display = 'none';
+        }
+    
+        function updateProgress() {
+            const percentage = (knownWords / totalWords) * 100;
+            progressBar.style.width = `${percentage}%`; // Update the progress bar width
+            progressText.textContent = `Wörter ${knownWords}/${totalWords}`; // Update the text
+        }
+
+        function importProgress() {
+            const progressInput = document.getElementById('progress-input');
+            const errorMessage = document.getElementById('error-message');
+            const progressValue = parseInt(progressInput.value, 10);
+
+            // Check if the input is a valid integer between 0 and 500
+            if (isNaN(progressValue) || progressValue < 0 || progressValue > 500) {
+                errorMessage.style.display = 'block';  // Show error message
+            } else {
+                errorMessage.style.display = 'none';  // Hide error message
+                // Update the answers array based on the input value
+                for (let i = 0; i < totalWords; i++) {
+                    if (i < progressValue) {
+                        answers[i] = 3; // Set values to 3 up to the input value
+                    } else {
+                        answers[i] = 0; // Set values to 0 after the input value
+                    }
+                }
+
+                // Recalculate the number of known words and update the progress bar
+                knownWords = answers.filter(answer => answer >= 3).length;
+                updateProgress(); // Update the progress bar after modifying answers
+                console.log(`Progress imported: ${progressValue}`);
+            }
+        }
+
+
+    
+        showQuestion();
+    </script>
+    
+</body>
+</html>
